@@ -1,12 +1,27 @@
 import numpy as np
 
-def l1(Y_h, Y):
-    diff_avg = Y - Y_h
-    return np.abs(diff_avg, out=diff_avg).mean()
 
-def l2(Y_h, Y):
-    diff_avg = Y - Y_h
-    return np.square(diff_avg, out=diff_avg).mean()
+class L1:
+    def function(output=None, actual=None):
+        diff_avg = actual - output
+        return np.abs(diff_avg, out=diff_avg).mean()
+    
+    def derivative(output=None, actual=None):
+        raise NotImplementedError
 
-def ce(Y_h, Y):
-    return (-(Y * np.log(Y_h) + (1 - Y) * np.log(1 - Y_h))).mean()
+
+class L2:
+    def function(output=None, actual=None):
+        diff_avg = actual - output
+        return np.square(diff_avg, out=diff_avg).mean()
+    
+    def derivative(output=None, actual=None):
+        raise NotImplementedError
+
+
+class LogLoss:
+    def function(output=None, actual=None):
+        return (-(actual * np.log(output + 1e-15) + (1 - actual) * np.log(1 - output + 1e-15))).mean()
+
+    def derivative(output=None, actual=None):
+        raise NotImplementedError

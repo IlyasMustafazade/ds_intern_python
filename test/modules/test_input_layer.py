@@ -4,7 +4,7 @@ import sys
 import os
 
 
-FILE_DEPTH = 2
+FILE_DEPTH = 3
 sys.path.append("\\".join(os.path.abspath(__file__).split("\\")[:-FILE_DEPTH]))
 import modules.input_layer as input_layer
 

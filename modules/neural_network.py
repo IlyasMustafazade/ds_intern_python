@@ -37,9 +37,23 @@ class NeuralNetwork:
             if n_input >= 2:
                 raise ValueError("InputLayer must be unique") 
     
-    def forward_pass(self, input_matrix=None):
+    def forward(self, input_matrix=None):
         last_activation_matrix = input_matrix
         for layer in self.layer_lst:
             layer.forward_pass(input_matrix=last_activation_matrix)
             last_activation_matrix = layer.activation_matrix
         self.output_matrix = last_activation_matrix
+
+    def backward(self, label_matrix=None):
+        last_layer = self.layer_lst[-1]
+        delta = np.multiply(last_layer.activation_matrix - label_matrix,
+            last_layer.activation_func.derivative(last_layer.net_output))
+
+        for i in reversed(range(len(self.layer_lst) - 1)):
+            middle, right = self.layer_lst[i], self.layer_lst[i + 1]
+            right.derivative_wrt_weight = np.matmul(middle.activation_matrix, delta.T)
+            right.derivative_wrt_bias = delta
+
+            delta = np.multiply(np.matmul(right.weight_matrix, delta),
+                middle.activation_func.derivative(middle.net_output))
+

@@ -4,7 +4,7 @@ import sys
 import os
 
 
-FILE_DEPTH = 2
+FILE_DEPTH = 3
 sys.path.append("\\".join(os.path.abspath(__file__).split("\\")[:-FILE_DEPTH]))
 import modules.neural_network as neural_network
 import modules.activation as activation
@@ -24,12 +24,12 @@ class TestNeuralNetwork(unittest.TestCase):
         n_neuron2 = 3
         cls.layer2 = DenseLayer(input_dim=cls.input_layer.output_dim,
                             output_dim=n_neuron2,
-                            activation_func=activation.relu)
+                            activation_func=activation.ReLU)
 
         n_neuron3 = 2
         cls.layer3 = DenseLayer(input_dim=cls.layer2.output_dim,
                             output_dim=n_neuron3,
-                            activation_func=activation.relu)
+                            activation_func=activation.ReLU)
 
 
     def test__init__(self):
@@ -68,7 +68,7 @@ class TestNeuralNetwork(unittest.TestCase):
                 learning_rate=learning_rate
             )
     
-    def test_forward_pass(self):
+    def test_forward(self):
         n_row_weight, n_col_weight = TestNeuralNetwork.layer2.weight_matrix.shape
         nonrandom_weight_matrix = np.arange(n_row_weight * n_col_weight)
         nonrandom_weight_matrix = np.reshape(nonrandom_weight_matrix, (n_row_weight, n_col_weight))
@@ -116,12 +116,23 @@ class TestNeuralNetwork(unittest.TestCase):
             ], learning_rate=learning_rate
         )
     
-        network.forward_pass(input_matrix=TestNeuralNetwork.input_matrix)
+        network.forward(input_matrix=TestNeuralNetwork.input_matrix)
         self.assertTrue((network.output_matrix == np.array([
             [[1, 2],
              [5, 16],
              [0, 34]]
         ])).all())
+    
+    def test_backward(self):
+        input_matrix = np.array([
+            [0.3, 0.6, 0.9, 1.1, 0],
+            [-0.9, 0.0, 2.9, -0.1, 1],
+            [3.3, 1.6, -5.9, 0.7, 1],
+            [-1.9, -0.2, 0.3, 0.5, 0]
+        ])
+        feature_matrix = input_matrix[:, :-1]
+        label_matrix = input_matrix[:, -1]
+        
 
 
 if __name__ == "__main__": unittest.main(verbosity=3)
