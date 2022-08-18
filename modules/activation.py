@@ -1,5 +1,11 @@
 import numpy as np
 
+class Identity:
+    def function(X):
+        return X
+    
+    def derivative(X):
+        return np.ones(X.shape)
 
 class ReLU:
     def function(X):
