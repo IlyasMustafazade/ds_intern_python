@@ -2,3 +2,4 @@ resource/
 **/__pycache__/
 *.so
 *.txt
+.vscode/settings.json
