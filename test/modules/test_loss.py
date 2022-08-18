@@ -56,7 +56,14 @@ class TestL2(TestLoss):
         np.testing.assert_allclose(l2_loss, actual_loss, rtol=1e-08)
 
     def test_derivative(self):
-        pass
+        l2_loss_derivative = loss.L2.derivative(output=TestLoss.output, actual=TestLoss.actual)
+        actual_derivative = np.array([
+            [0.4, 0.2],
+            [-1.0, -0.8],
+            [-0.4, -1.0],
+            [0, 0.6]
+        ])
+        np.testing.assert_allclose(l2_loss_derivative, actual_derivative, rtol=1e-08)
 
 
 class TestLogLoss(TestLoss):
@@ -66,7 +73,14 @@ class TestLogLoss(TestLoss):
         np.testing.assert_allclose(log_loss, actual_loss, rtol=1e-04)
 
     def test_derivative(self):
-        pass
+        log_loss_derivative = loss.LogLoss.derivative(output=TestLoss.output, actual=TestLoss.actual)
+        actual_derivative = actual_derivative = np.array([
+            [ 1.25,  1.11111111],
+            [-2.  , -1.66666667],
+            [-1.25, -2.        ],
+            [ 0.  ,  1.42857143]
+        ])
+        np.testing.assert_allclose(log_loss_derivative, actual_derivative, rtol=1e-08)
 
 
 if __name__ == "__main__": unittest.main(verbosity=3)
