@@ -16,12 +16,16 @@ class L2:
         return np.square(diff_avg, out=diff_avg).mean()
     
     def derivative(output=None, actual=None):
-        raise NotImplementedError
+        return 2 * (output - actual)
 
 
 class LogLoss:
     def function(output=None, actual=None):
-        return (-(actual * np.log(output + 1e-15) + (1 - actual) * np.log(1 - output + 1e-15))).mean()
+        INCREMENT = 1e-15
+        return (-(np.multiply(actual, np.log(output + INCREMENT)) +\
+                np.multiply((1 - actual), np.log(1 - output + INCREMENT)))).mean()
 
     def derivative(output=None, actual=None):
-        raise NotImplementedError
+        INCREMENT = 1e-15
+        return (output - actual) / (np.multiply(output, (1 - output)) + INCREMENT)
+
