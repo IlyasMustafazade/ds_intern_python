@@ -2,6 +2,7 @@ import numpy as np
 
 
 class DenseLayer:
+    EPSILON = 1e-4
     def __init__(self,
                  input_dim=None,
                  output_dim=None,
@@ -44,3 +45,15 @@ class DenseLayer:
         product_with_bias = product + self.bias_matrix
         self.net_output = product_with_bias
         self.activation_matrix = self.activation_func.function(product_with_bias)
+    
+    def increment_weight(self):
+        self.weight_matrix = self.weight_matrix + DenseLayer.EPSILON
+
+    def decrement_weight(self):
+        self.weight_matrix = self.weight_matrix - DenseLayer.EPSILON
+
+    def increment_bias(self):
+        self.bias_matrix = self.bias_matrix + DenseLayer.EPSILON
+    
+    def decrement_bias(self):
+        self.bias_matrix = self.bias_matrix - DenseLayer.EPSILON
