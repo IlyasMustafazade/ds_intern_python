@@ -1,5 +1,11 @@
 import numpy as np
 
+class Identity:
+    def function(X):
+        return X
+    
+    def derivative(X):
+        return np.ones(X.shape)
 
 class ReLU:
     def function(X):
@@ -15,7 +21,7 @@ class Sigmoid:
     
     def derivative(X):
         sigmoid_x = Sigmoid.function(X)
-        return sigmoid_x * (1 - sigmoid_x)
+        return np.multiply(sigmoid_x, (1 - sigmoid_x))
 
 
 class Softmax:
