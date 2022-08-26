@@ -1,6 +1,6 @@
-import unittest, sys, os
+import unittest, sys, os, logging
 import numpy as np
-from numpy.testing import assert_allclose
+from numpy.testing import assert_allclose, assert_array_equal
 
 
 FILE_DEPTH = 4
@@ -15,15 +15,12 @@ class TestIdentity(unittest.TestCase):
         cls.mtx = np.array([[1, 2], [2, 3]])
     
     def test_identity(self):
-        act = identity(self.mtx)
-        des = self.mtx
-        assert_allclose(act, des, rtol=1e-8)
-    
+        assert_array_equal(identity(self.mtx), self.mtx)
+
     def test_identity_deriv(self):
-        act = identity(self.mtx, deriv=True)
-        des = np.ones(self.mtx.shape)
-        assert_allclose(act, des, rtol=1e-8)
-    
+        assert_array_equal(
+            identity(self.mtx, deriv=True), np.ones(self.mtx.shape))
+
 
 class TestReLU(unittest.TestCase):
     @classmethod
@@ -33,19 +30,13 @@ class TestReLU(unittest.TestCase):
                             [17, 19, 23, -33]])
 
     def test_relu(self):
-        actual = relu(self.mtx, deriv=False)
-        desired = np.array([[0, 12, 23, 0],
-                            [0, 11, 0, 0],
-                            [17, 19, 23, 0]])
-        assert_allclose(actual, desired, rtol=1e-8)
+        des = np.array([[0, 12, 23, 0], [0, 11, 0, 0], [17, 19, 23, 0]])
+        assert_array_equal(relu(self.mtx), des)
     
     def test_relu_deriv(self):
-        actual = relu_deriv(self.mtx)
-        desired = np.array([[0, 1, 1, 0],
-                            [0, 1, 0, 0],
-                            [1, 1, 1, 0]])
-        assert_allclose(actual, desired, rtol=1e-8)
-        assert_allclose(relu(self.mtx, deriv=True), desired, rtol=1e-02)
+        des = np.array([[0, 1, 1, 0], [0, 1, 0, 0], [1, 1, 1, 0]])
+        assert_array_equal(relu_deriv(self.mtx), des)
+        assert_array_equal(relu(self.mtx, deriv=True), des)
 
 
 class TestSigmoid(unittest.TestCase):
@@ -54,17 +45,14 @@ class TestSigmoid(unittest.TestCase):
         cls.mtx = np.array([[-1, 2], [3, -4]])
 
     def test_sigmoid(self):
-        actual = sigmoid(self.mtx, deriv=False)
-        desired = np.array([[0.268941, 0.880797],
-                            [0.952574, 0.017986]])
-        assert_allclose(actual, desired, rtol=1e-02)
+        des = np.array([[0.268941, 0.880797], [0.952574, 0.017986]])
+        assert_allclose(sigmoid(self.mtx), des, rtol=1e-02)
     
     def test_sigmoid_deriv(self):
-        actual = sigmoid_deriv(self.mtx)
-        desired = np.array([[0.196366, 0.104993],
-                            [0.045176, 0.017662]])
-        assert_allclose(actual, desired, rtol=1e-02)
-        assert_allclose(sigmoid(self.mtx, deriv=True), desired, rtol=1e-02)
+        des = np.array([[0.196366, 0.104993], [0.045176, 0.017662]])
+        assert_allclose(sigmoid_deriv(self.mtx), des, rtol=1e-02)
+        assert_allclose(sigmoid(self.mtx, deriv=True), des, rtol=1e-02)
     
 
-if __name__ == "__main__": unittest.main(verbosity=3)
+if __name__ == "__main__":
+    unittest.main(verbosity=3)
